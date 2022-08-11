@@ -4,9 +4,9 @@ export class CreateHomeDto {
   @IsString()
   readonly name: string;
 
-  @IsString({ each: true })
-  readonly desc: string[];
-
   @IsString()
   readonly createTime: string;
+
+  @IsString({ each: true })
+  readonly desc: string[];
 }

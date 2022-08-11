@@ -5,25 +5,26 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { HomeDto } from '../DTO/home.dto';
+import { Home } from './entities/home.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateHomeDto } from './dto/create-home.dto';
+import {UpdateHomeDto} from "./dto/update-home.dto";
 
 @Injectable()
 export class HomeService {
-  private homeData: HomeDto[] = [
-    {
-      id: 1,
-      name: 'home',
-      desc: ['home'],
-      createTime: `${new Date().toLocaleDateString()}`,
-    },
-  ];
+  constructor(
+    @InjectRepository(Home) // 创建数据表
+    private readonly HomeRepository: Repository<Home>,
+  ) {}
+
 
   findAll() {
-    return this.homeData;
+    return this.HomeRepository.find(); //查询数据
   }
 
-  findOne(id: string) {
-    const home = this.homeData.find((item: HomeDto) => item.id === +id);
+  async findOne(id: number) {
+    const home = await this.HomeRepository.findOne(id);
     if (!home) {
       // throw new HttpException(`id为${id}的不存在`, HttpStatus.NOT_FOUND);
       throw new NotFoundException(`id为${id}的不存在`);
@@ -31,37 +32,27 @@ export class HomeService {
     return home;
   }
 
-  createHome(body: HomeDto) {
-    const newId = ++this.homeData[0].id;
-    this.homeData.push({
-      id: newId,
-      ...body,
-    });
-    return this.homeData;
+  createHome(createHomeDto: CreateHomeDto) {
+    const newHome = this.HomeRepository.create(createHomeDto);
+    return this.HomeRepository.save(newHome);
   }
 
-  updateHome(id: string, body: any) {
-    const currentIndex = this.homeData.findIndex((item) => item.id === +id);
-    let newData = this.homeData;
-    if (currentIndex >= 0) {
-      newData = this.homeData.map((item, index) => {
-        if (currentIndex === index) {
-          item = {
-            ...item,
-            ...body,
-          };
-        }
-        return item;
-      });
+  async updateHome(id: number, updateHomeDto: UpdateHomeDto) {
+    const newHome = await this.HomeRepository.preload({
+      id: +id,
+      ...updateHomeDto,
+    })
+    if(!newHome){
+      throw new NotFoundException(`Home id is Not Found.`)
     }
-    return newData;
+    return this.HomeRepository.save(newHome);
   }
 
-  deleteHome(id: string) {
-    const currentIndex = this.homeData.findIndex((item) => item.id === +id);
-    if (currentIndex >= 0) {
-      this.homeData.splice(currentIndex, 1);
+  async deleteHome(id: number) {
+    const home = await this.HomeRepository.findOne(id);
+    if(!home) {
+       throw new NotFoundException(`${id} of Home is Not Found.`)
     }
-    return this.homeData;
+    return this.HomeRepository.remove(home);
   }
 }
