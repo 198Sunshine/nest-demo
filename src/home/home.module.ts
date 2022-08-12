@@ -3,9 +3,10 @@ import { HomeController } from './home.controller';
 import { HomeService } from './home.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Home } from './entities/home.entity';
+import { Desc } from './entities/desc.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Home])],
+  imports: [TypeOrmModule.forFeature([Home, Desc])],
   controllers: [HomeController],
   providers: [HomeService],
 })

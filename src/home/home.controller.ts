@@ -39,7 +39,7 @@ export class HomeController {
   @Post()
   // @HttpCode(HttpStatus.GONE)
   create(@Body() createHomeDto: CreateHomeDto) {
-    console.log(createHomeDto instanceof CreateHomeDto, createHomeDto);
+    // console.log(createHomeDto instanceof CreateHomeDto, createHomeDto);
     // return body;
     return this.homeService.createHome(createHomeDto);
   }

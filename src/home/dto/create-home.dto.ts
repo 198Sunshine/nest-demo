@@ -1,4 +1,5 @@
 import { IsString } from 'class-validator';
+import { Desc } from '../entities/desc.entity';
 
 export class CreateHomeDto {
   @IsString()
@@ -8,5 +9,5 @@ export class CreateHomeDto {
   readonly createTime: string;
 
   @IsString({ each: true })
-  readonly desc: string[];
+  readonly descs: string[];
 }
