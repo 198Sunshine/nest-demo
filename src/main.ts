@@ -9,6 +9,9 @@ async function bootstrap() {
       whitelist: true, // 开启白名单，过滤掉多余的属性
       forbidNonWhitelisted: true, // 开启白名单剔除错误提示
       transform: true, //开启类型转换,对性能有轻微影响
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
   await app.listen(3000);
