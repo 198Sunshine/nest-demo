@@ -15,7 +15,7 @@ export class UserEntity {
   @Column({
     type: 'varchar',
     length: 20,
-    nullable: true,
+    nullable: false,
   })
   account_name: string;
 
@@ -36,7 +36,7 @@ export class UserEntity {
   @Column({
     type: 'char',
     length: 6,
-    nullable: true,
+    nullable: false,
   })
   passwd_salt: string;
 

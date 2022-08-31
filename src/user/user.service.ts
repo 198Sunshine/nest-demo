@@ -92,7 +92,7 @@ export class UserService {
     }
   }
 
-  async createUser(createUserDto: any) {
+  async createUser(createUserDto: CreateUserDto): Promise<any> {
     const { userName, realName, password, mobile } = createUserDto || {};
     const { data }: any = await this.findUser(userName);
     if (data) {
